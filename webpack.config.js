@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
     devtool: 'inline-sourcemap',
     entry: __dirname + '/src/main.ts',
@@ -15,6 +17,9 @@ module.exports = {
         ]
     },
     resolve: {
+        modules: [
+            path.resolve(__dirname, 'src')
+        ],
         extensions: ['.js', '.ts']
     }
 }

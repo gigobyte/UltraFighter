@@ -1,7 +1,6 @@
-import Game from './game'
-import Wall from './wall'
-import Player from './player'
-import Connection from './connection'
+import Game from 'game'
+import Wall from 'objects/wall'
+import Player from 'objects/player'
 
 const player1 = new Player(430, Game.canvas.height - 350, 50, 50)
 const floor = new Wall(300, Game.canvas.height - 300, Game.canvas.width - 600, 20)
@@ -14,8 +13,6 @@ Game.addObject(floor)
 Game.addObject(platform)
 Game.addObject(platform2)
 Game.addObject(platform3)
-
-const connection = new Connection('ws://localhost:9000')
 
 const gameLoop = () => {
     Game.draw()

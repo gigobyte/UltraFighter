@@ -1,6 +1,6 @@
-import { GameObject, Edges, CollisionResult } from './interfaces'
-import EventEmitter from './eventEmitter'
-import Wall from './wall'
+import { GameObject, Edges, CollisionResult } from 'common/interfaces'
+import EventEmitter from 'events/eventEmitter'
+import Wall from 'objects/wall'
 
 interface IGame {
     canvas: HTMLCanvasElement
