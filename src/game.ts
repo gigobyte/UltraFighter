@@ -1,4 +1,5 @@
-import { GameObject, Edges, CollisionResult } from 'common/interfaces'
+import { Edges, CollisionResult } from 'common/interfaces'
+import GameObject from 'common/gameObject'
 import EventEmitter from 'events/eventEmitter'
 import Wall from 'objects/wall'
 

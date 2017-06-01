@@ -1,13 +1,18 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "outDir": "./dist/",
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "module": "commonjs",
-    "target": "es6",
-    "jsx": "react",
-    "allowJs": true
-  }
+        "baseUrl": "./src",
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noImplicitThis": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "module": "commonjs",
+        "target": "es6",
+        "allowJs": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }

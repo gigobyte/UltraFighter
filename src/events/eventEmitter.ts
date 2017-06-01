@@ -1,11 +1,7 @@
 import Game from 'game'
 
-interface IEventEmitter {
-    emit: (event: string) => void
-}
-
-class EventEmitter implements IEventEmitter {
-    emit(event: string) {
+class EventEmitter {
+    public static emit(event: string) {
         Game.objects.forEach((obj) => {
             const objProperties = Object.getOwnPropertyNames(Object.getPrototypeOf(obj))
 
@@ -18,4 +14,4 @@ class EventEmitter implements IEventEmitter {
     }
 }
 
-export default new EventEmitter()
+export default EventEmitter

@@ -1,8 +1,8 @@
 import Game from 'game'
-import { GameObject, Edges } from 'common/interfaces'
+import GameObject from 'common/gameObject'
 import gameSettings from 'common/gameSettings'
 
-interface IPlayer extends GameObject {
+interface IPlayer {
     velocity: {x: number, y: number}
     onArrowUpPressed: () => void
     onArrowLeftPressed: () => void
@@ -13,7 +13,7 @@ interface IPlayer extends GameObject {
     pressed: {left: boolean, right: boolean}
 }
 
-class Player implements IPlayer {
+class Player extends GameObject implements IPlayer {
     pos: {x: number, y: number}
     dims: {w: number, h: number}
     velocity = {x: 0, y: 0}
@@ -21,33 +21,9 @@ class Player implements IPlayer {
     pressed = {left: false, right: false, up: false}
 
     constructor(x: number, y: number, w: number, h: number) {
+        super()
         this.pos = {x, y}
         this.dims = {w, h}
-    }
-
-    getEdges(): Edges {
-        return {
-            a: {
-                x: this.pos.x,
-                y: this.pos.y + this.dims.h
-            },
-            b: {
-                x: this.pos.x + this.dims.w,
-                y: this.pos.y + this.dims.h
-            },
-            c: {
-                x: this.pos.x + this.dims.w,
-                y: this.pos.y
-            },
-            d: {
-                x: this.pos.x,
-                y: this.pos.y
-            }
-        }
-    }
-
-    private getSteps(velocity: number): number[] {
-        return Array.from(Array(Math.abs(velocity)))
     }
 
     private setNewYPosition(): void {
@@ -95,10 +71,6 @@ class Player implements IPlayer {
             this.velocity.x = -gameSettings.hspeed
         }
 
-        if (this.pressed.left && this.pressed.right) {
-            this.velocity.x = 0
-        }
-
         if (collisions.xLeft && this.velocity.x < 0) {
             this.moving.left = false
             this.velocity.x = 0
@@ -126,7 +98,7 @@ class Player implements IPlayer {
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D) {
+    public draw(ctx: CanvasRenderingContext2D) {
         this.setNewYPosition()
         this.setNewXPosition()
 
@@ -134,32 +106,32 @@ class Player implements IPlayer {
         ctx.fillRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h)
     }
 
-    onArrowUpPressed() {
+    public onArrowUpPressed() {
         if (!this.pressed.up && !this.moving.up && this.velocity.y <= 0) {
             this.velocity.y = -gameSettings.vspeed
             this.pressed.up = true
         }
     }
 
-    onArrowUpReleased() {
+    public onArrowUpReleased() {
         this.pressed.up = false
     }
 
-    onArrowLeftPressed() {
+    public onArrowLeftPressed() {
         this.pressed.left = true
         this.velocity.x = -gameSettings.hspeed
     }
 
-    onArrowLeftReleased() {
+    public onArrowLeftReleased() {
         this.pressed.left = false
     }
 
-    onArrowRightPressed() {
+    public onArrowRightPressed() {
         this.pressed.right = true
         this.velocity.x = gameSettings.hspeed
     }
 
-    onArrowRightReleased() {
+    public onArrowRightReleased() {
         this.pressed.right = false
     }
 }
