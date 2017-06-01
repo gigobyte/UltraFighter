@@ -1,92 +1,166 @@
 import Game from './game'
-import { IGameObject, IEventListeners } from './interfaces'
+import { GameObject, Edges } from './interfaces'
 import gameSettings from './gameSettings'
 
-interface IPlayer extends IGameObject {
+interface IPlayer extends GameObject {
     velocity: {x: number, y: number}
-    eventListeners: IEventListeners
     onArrowUpPressed: () => void
     onArrowLeftPressed: () => void
     onArrowLeftReleased: () => void
     onArrowRightPressed: () => void
     onArrowRightReleased: () => void
     moving: {left: boolean, right: boolean, up: boolean}
+    pressed: {left: boolean, right: boolean}
 }
 
 class Player implements IPlayer {
     pos: {x: number, y: number}
     dims: {w: number, h: number}
-    eventListeners: IEventListeners
     velocity = {x: 0, y: 0}
     moving = {left: false, right: false, up: false}
+    pressed = {left: false, right: false, up: false}
 
     constructor(x: number, y: number, w: number, h: number) {
         this.pos = {x, y}
         this.dims = {w, h}
     }
 
-    draw(ctx: CanvasRenderingContext2D) {
-        let hitTheGound = false
-
-        if (Game.checkYCollision(this)) {
-            hitTheGound = true
-        } else {
-            for(const i of Array(this.velocity.y)) {
-                this.pos.y += 1
-                if (Game.checkYCollision(this)) {
-                    this.moving.up = false
-                    this.velocity.y = 0
-                    hitTheGound = true
-                    break
-                }
+    getEdges(): Edges {
+        return {
+            a: {
+                x: this.pos.x,
+                y: this.pos.y + this.dims.h
+            },
+            b: {
+                x: this.pos.x + this.dims.w,
+                y: this.pos.y + this.dims.h
+            },
+            c: {
+                x: this.pos.x + this.dims.w,
+                y: this.pos.y
+            },
+            d: {
+                x: this.pos.x,
+                y: this.pos.y
             }
         }
+    }
 
-        if (!hitTheGound) {
+    private getSteps(velocity: number): number[] {
+        return Array.from(Array(Math.abs(velocity)))
+    }
+
+    private setNewYPosition(): void {
+        const currentY = this.pos.y
+        const collisions = Game.checkCollision(this.getEdges())
+
+        this.moving.up = this.velocity.y < 0
+
+        if (collisions.yAbove) {
+            this.velocity.y = 0
+            this.moving.up = false
+        }
+
+        if (collisions.yBelow && !this.moving.up) {
+            this.velocity.y = 0
+        } else {
             this.velocity.y += gameSettings.gravity
-            this.pos.y += this.velocity.y
         }
 
-        if (this.moving.right || this.moving.left) {
-            this.pos.x += this.velocity.x
+        const stepSize = this.velocity.y > 0 ? 1 : -1
+
+        while (this.pos.y !== currentY + this.velocity.y) {
+            this.pos.y += stepSize
+
+            const nextCollisions = Game.checkCollision(this.getEdges())
+
+            if (nextCollisions.yBelow || nextCollisions.yAbove) {
+                break
+            }
+        }
+    }
+
+    private setNewXPosition(): void {
+        const currentX = this.pos.x
+        const collisions = Game.checkCollision(this.getEdges())
+
+        this.moving.right = this.velocity.x > 0
+        this.moving.left = this.velocity.x < 0
+
+        if (this.pressed.right) {
+            this.velocity.x = gameSettings.hspeed
         }
 
-        if (!this.moving.right && this.velocity.x > 0) {
-            this.velocity.x *= gameSettings.friction
-            this.pos.x += this.velocity.x
+        if (this.pressed.left) {
+            this.velocity.x = -gameSettings.hspeed
         }
+
+        if (this.pressed.left && this.pressed.right) {
+            this.velocity.x = 0
+        }
+
+        if (collisions.xLeft && this.velocity.x < 0) {
+            this.moving.left = false
+            this.velocity.x = 0
+        }
+
+        if (collisions.xRight && this.velocity.x > 0) {
+            this.moving.right = false
+            this.velocity.x = 0
+        }
+
+        if (!this.pressed.left && !this.pressed.right) {
+            this.velocity.x = 0
+        }
+
+        const stepSize = this.velocity.x > 0 ? 1 : -1
+
+        while (this.pos.x !== currentX + this.velocity.x) {
+            this.pos.x += stepSize
+
+            const nextCollisions = Game.checkCollision(this.getEdges())
+
+            if (nextCollisions.xLeft || nextCollisions.xRight) {
+                break
+            }
+        }
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        this.setNewYPosition()
+        this.setNewXPosition()
 
         ctx.fillStyle = 'black'
         ctx.fillRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h)
     }
 
     onArrowUpPressed() {
-        if (!this.moving.up) {
-            this.velocity.y = -17
-            this.moving.up = true
+        if (!this.pressed.up && !this.moving.up && this.velocity.y <= 0) {
+            this.velocity.y = -gameSettings.vspeed
+            this.pressed.up = true
         }
+    }
+
+    onArrowUpReleased() {
+        this.pressed.up = false
     }
 
     onArrowLeftPressed() {
-        if (!this.moving.left) {
-            this.moving.left = true
-            this.velocity.x = -5
-        }
+        this.pressed.left = true
+        this.velocity.x = -gameSettings.hspeed
     }
 
     onArrowLeftReleased() {
-        this.moving.left = false
+        this.pressed.left = false
     }
 
     onArrowRightPressed() {
-        if (!this.moving.right) {
-            this.moving.right = true
-            this.velocity.x = 5
-        }
+        this.pressed.right = true
+        this.velocity.x = gameSettings.hspeed
     }
 
     onArrowRightReleased() {
-        this.moving.right = false
+        this.pressed.right = false
     }
 }
 

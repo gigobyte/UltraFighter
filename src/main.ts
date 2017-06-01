@@ -1,18 +1,29 @@
 import Game from './game'
 import Wall from './wall'
 import Player from './player'
+import Connection from './connection'
 
-const player1 = new Player(200, 200, 50, 50)
-const floor = new Wall(0, Game.canvas.height - 20, Game.canvas.width, 20)
-const floor2 = new Wall(400, Game.canvas.height - 100, 60, 20)
+const player1 = new Player(430, Game.canvas.height - 350, 50, 50)
+const floor = new Wall(300, Game.canvas.height - 300, Game.canvas.width - 600, 20)
+const platform = new Wall(450, Game.canvas.height - 420, 200, 20)
+const platform2 = new Wall(1200, Game.canvas.height - 420, 200, 20)
+const platform3 = new Wall(810, Game.canvas.height - 520, 250, 20)
 
 Game.addObject(player1)
 Game.addObject(floor)
-// Game.addObject(floor2)
+Game.addObject(platform)
+Game.addObject(platform2)
+Game.addObject(platform3)
+
+const connection = new Connection('ws://localhost:9000')
 
 const gameLoop = () => {
     Game.draw()
-    requestAnimationFrame(gameLoop)
+    // setTimeout(() => {
+        requestAnimationFrame(gameLoop)
+    // }, 300)
 }
 
-gameLoop()
+gameLoop();
+
+(<any>window).Game = Game

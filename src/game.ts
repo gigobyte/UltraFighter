@@ -1,20 +1,20 @@
-import { IGameObject } from './interfaces'
+import { GameObject, Edges, CollisionResult } from './interfaces'
 import EventEmitter from './eventEmitter'
 import Wall from './wall'
 
 interface IGame {
     canvas: HTMLCanvasElement
     ctx: CanvasRenderingContext2D
-    objects: IGameObject[]
+    objects: GameObject[]
     draw: () => void,
-    addObject: (obj: IGameObject) => void
-    checkYCollision: (obj: IGameObject) => boolean
+    addObject: (obj: GameObject) => void
+    checkCollision(edges: Edges): CollisionResult
 }
 
 class Game implements IGame {
     canvas: HTMLCanvasElement
     ctx: CanvasRenderingContext2D
-    objects: IGameObject[]
+    objects: GameObject[]
 
     constructor() {
         this.canvas = <HTMLCanvasElement>document.querySelector('#render-target')
@@ -22,7 +22,6 @@ class Game implements IGame {
         this.objects = []
 
         document.addEventListener('keydown', (e) => {
-            console.log(e)
             EventEmitter.emit(e.code.toLowerCase() + 'pressed')
         })
 
@@ -37,17 +36,42 @@ class Game implements IGame {
         this.objects.forEach((obj) => obj.draw(this.ctx))
     }
 
-    addObject(obj: IGameObject) {
+    addObject(obj: GameObject) {
         this.objects.push(obj)
     }
 
-    checkYCollision(obj: IGameObject): boolean {
-        const objBottom = obj.pos.y + obj.dims.h
+    checkCollision(edges: Edges): CollisionResult {
+        const { a: edgeA, b: edgeB, c: edgeC, d: edgeD } = edges
         const wallObjs = this.objects.filter((gameObj) => gameObj instanceof Wall)
 
-        return wallObjs.some((wallObj) => {
-            return wallObj.pos.y <= objBottom
-        })
+        const DEFAULT_RESULT = {
+            yBelow: false,
+            yAbove: false,
+            xLeft: false,
+            xRight: false
+        }
+
+        return wallObjs.reduce((result, wallObj) => {
+            const { a: wallEdgeA, b: wallEdgeB, c: wallEdgeC, d: wallEdgeD } = wallObj.getEdges()
+
+            if ((edgeB.x > wallEdgeD.x && edgeA.x < wallEdgeC.x) && (edgeA.y === wallEdgeD.y)) {
+                result.yBelow = true
+            }
+
+            if ((edgeC.x > wallEdgeA.x && edgeD.x < wallEdgeB.x) && (edgeD.y === wallEdgeA.y)) {
+                result.yAbove = true
+            }
+
+            if ((edgeB.x === wallEdgeA.x) && (edgeB.y > wallEdgeD.y && edgeC.y < wallEdgeA.y)) {
+                result.xRight = true;
+            }
+
+            if ((edgeA.x === wallEdgeB.x) && (edgeA.y > wallEdgeC.y && edgeD.y < wallEdgeB.y)) {
+                result.xLeft = true;
+            }
+
+            return result
+        }, DEFAULT_RESULT)
     }
 }
 

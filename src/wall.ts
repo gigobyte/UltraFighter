@@ -1,6 +1,6 @@
-import { IGameObject } from './interfaces'
+import { GameObject, Edges } from './interfaces'
 
-class Wall implements IGameObject {
+class Wall implements GameObject {
     pos: {x: number, y: number}
     dims: {w: number, h: number}
 
@@ -10,8 +10,29 @@ class Wall implements IGameObject {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        ctx.fillStyle = 'black'
+        ctx.fillStyle = 'red'
         ctx.fillRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h)
+    }
+
+    getEdges(): Edges {
+        return {
+            a: {
+                x: this.pos.x,
+                y: this.pos.y + this.dims.h
+            },
+            b: {
+                x: this.pos.x + this.dims.w,
+                y: this.pos.y + this.dims.h
+            },
+            c: {
+                x: this.pos.x + this.dims.w,
+                y: this.pos.y
+            },
+            d: {
+                x: this.pos.x,
+                y: this.pos.y
+            }
+        }
     }
 }
 

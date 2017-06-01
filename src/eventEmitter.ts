@@ -1,4 +1,3 @@
-import { IGameObject } from './interfaces'
 import Game from './game'
 
 interface IEventEmitter {
@@ -8,7 +7,9 @@ interface IEventEmitter {
 class EventEmitter implements IEventEmitter {
     emit(event: string) {
         Game.objects.forEach((obj) => {
-            for (const property in obj) {
+            const objProperties = Object.getOwnPropertyNames(Object.getPrototypeOf(obj))
+
+            for (const property of objProperties) {
                 if (property.toLowerCase().replace('on', '') === event) {
                     (obj as any)[property]()
                 }
