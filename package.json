@@ -5,7 +5,8 @@
   "main": "webpack.config.js",
   "scripts": {
     "build": "webpack -w",
-    "serve": "ts-node server"
+    "serve": "ts-node server",
+    "start": "webpack && ts-node server"
   },
   "author": "",
   "license": "ISC",
