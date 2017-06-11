@@ -10,5 +10,5 @@ export interface JoinRoomModel {
 }
 
 export interface SyncCoordinatesModel {
-    data: Map<String, Position>
+    data: Object
 }

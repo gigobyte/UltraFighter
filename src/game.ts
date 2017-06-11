@@ -43,8 +43,8 @@ class Game implements IGame {
         this.currentScene.objects.forEach((obj) => obj.draw(this.ctx))
 
         const coordinates = Array.from(this.currentScene.objects).reduce((res, [id, obj]) => {
-            return res.set(id, obj.pos)
-        }, new Map())
+            return {...res, [id]: obj.pos}
+        }, {})
 
         Connection.emit(syncCoordinates({data: coordinates}))
     }

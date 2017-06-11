@@ -35,8 +35,8 @@ class Connection {
             EventEmitter.emit('userleft', username)
         })
 
-        this.socket.on('sync-coordinates', (data: Map<String, Position>) => {
-            console.log(data)
+        this.socket.on('sync-coordinates', (data: any) => {
+            EventEmitter.emit('coordinatessynced', data.data)
         })
     }
 

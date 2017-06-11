@@ -2,13 +2,13 @@ import GameObject from 'common/gameObject'
 import EventEmitter from 'events/eventEmitter'
 
 interface IScene {
-    objects: Map<String, GameObject>
+    objects: Map<string, GameObject>
     addObject(id: string, obj: GameObject): void
 }
 
 class Scene implements IScene {
     public tag: string
-    public objects: Map<String, GameObject>
+    public objects: Map<string, GameObject>
 
     constructor(tag: string) {
         this.tag = tag
