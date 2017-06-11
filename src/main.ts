@@ -19,7 +19,7 @@ const initGame = () => {
 
     Game.init()
     Game.setScene(mainScene)
-    Connection.init('http://localhost:8080')
+    Connection.init(window.location.origin + ':' + process.env.PORT)
     gameLoop()
 }
 

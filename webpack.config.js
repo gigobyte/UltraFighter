@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
     devtool: 'inline-sourcemap',
@@ -21,5 +22,10 @@ module.exports = {
             path.resolve(__dirname, 'src')
         ],
         extensions: ['.js', '.ts']
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env.PORT': JSON.stringify(process.env.PORT)
+        })
+    ]
 }
