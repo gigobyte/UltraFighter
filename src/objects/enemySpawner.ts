@@ -19,6 +19,11 @@ class EnemySpawner extends GameObject {
         const enemy = new EnemyPlayer(gameSettings.defaultPlayerPosition.x, gameSettings.defaultPlayerPosition.y, username)
         Game.currentScene.addObject('enemy', enemy)
     }
+
+    onCreateExistingEnemy(username: string) {
+        const enemy = new EnemyPlayer(gameSettings.defaultPlayerPosition.x, gameSettings.defaultPlayerPosition.y, username)
+        Game.currentScene.addObject('enemy', enemy)
+    }
 }
 
 export default EnemySpawner

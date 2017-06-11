@@ -38,11 +38,16 @@ const handleMessages = (socket: SocketIO.Socket) => {
         const client = new Client(socket.id, data.username)
         const room = rooms.get(data.roomId)
 
+        if (room && room.clients.size === 2) {
+            return
+        }
+
         if (room) {
             room.addClient(client)
             room.clients.forEach((client) => {
                 socket.broadcast.emit('user-joined', client.username)
             })
+            socket.emit('enemy-in-room', Array.from(room.clients)[0].username)
         } else {
             socket.emit('room-not-found')
         }

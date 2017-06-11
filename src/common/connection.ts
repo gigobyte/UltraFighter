@@ -35,6 +35,10 @@ class Connection {
             EventEmitter.emit('userleft', username)
         })
 
+        this.socket.on('enemy-in-room', (username: string) => {
+            EventEmitter.emit('createexistingenemy', username)
+        })
+
         this.socket.on('sync-coordinates', (data: any) => {
             EventEmitter.emit('coordinatessynced', data.data)
         })
