@@ -19,7 +19,7 @@ const initGame = () => {
 
     Game.init()
     Game.setScene(mainScene)
-    Connection.init(window.location.origin + ':' + process.env.PORT)
+    Connection.init()
     gameLoop()
 }
 

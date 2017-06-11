@@ -7,8 +7,8 @@ import { Action } from 'actions'
 class Connection {
     private socket: SocketIOClient.Socket
 
-    public init(address: string) {
-        this.socket = io.connect(address)
+    public init() {
+        this.socket = io()
         const roomId =  window.location.hash.substring(1)
 
         if (roomId) {
