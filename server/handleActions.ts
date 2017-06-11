@@ -12,8 +12,8 @@ const handleMessages = (socket: SocketIO.Socket) => {
 
             if (disconnectedClient) {
                 room.removeClient(disconnectedClient)
-                room.clients.forEach((client) => {
-                    socket.broadcast.emit('user-left', client.username)
+                room.clients.forEach(() => {
+                    socket.broadcast.emit('user-left', disconnectedClient.username)
                 })
 
                 if (room.clients.size === 0) {
