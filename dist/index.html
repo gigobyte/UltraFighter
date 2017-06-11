@@ -6,10 +6,38 @@
         <meta name="theme-color" content="#1e1e1e">
         <title>Game</title>
     </head>
+    <style>
+        .menu-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            height: 85vh;
+        }
+
+        .menu-container * {
+            margin-right: 15px;
+        }
+
+        .user-input {
+            line-height: 20px;
+            font-size: 20px;
+        }
+
+        .start-button {
+            font-size: 20px;
+        }
+    </style>
     <body>
-        <div style="display: flex; justify-content: center;">
+        <div class="menu-container">
+            <span>Enter name: </span>
+            <input class="user-input" type="text" />
+            <button class="start-button">Start</button>
+        </div>
+        <div class="game-container" style="display: none;">
             <canvas id="render-target" width="1860" height="960"></canvas>
         </div>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js"></script>
         <script type="text/javascript" src="bundle.js"></script>
     </body>
 </html>

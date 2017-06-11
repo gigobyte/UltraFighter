@@ -15,15 +15,15 @@ interface IPlayer {
 
 class Player extends GameObject implements IPlayer {
     pos: {x: number, y: number}
-    dims: {w: number, h: number}
+    dims: {w: 50, h: 50}
     velocity = {x: 0, y: 0}
     moving = {left: false, right: false, up: false}
     pressed = {left: false, right: false, up: false}
 
-    constructor(x: number, y: number, w: number, h: number) {
+    constructor(x: number, y: number) {
         super()
         this.pos = {x, y}
-        this.dims = {w, h}
+        this.dims = {w: 50, h: 50}
     }
 
     private setNewYPosition(): void {
@@ -103,7 +103,10 @@ class Player extends GameObject implements IPlayer {
         this.setNewXPosition()
 
         ctx.fillStyle = 'black'
+        ctx.textAlign = 'center'
+        ctx.font = '16px Ariel'
         ctx.fillRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h)
+        ctx.fillText(gameSettings.username, this.pos.x + 25, this.pos.y - 10)
     }
 
     public onArrowUpPressed() {

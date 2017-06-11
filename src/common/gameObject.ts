@@ -1,17 +1,17 @@
-import { Edges } from 'common/interfaces'
+import { Position } from 'common/interfaces'
 
 export interface IGameObject {
     draw: (ctx: CanvasRenderingContext2D) => void
     pos: {x: number, y: number}
     dims: {w: number, h: number}
-    getEdges(): Edges
+    getEdges(): Position
 }
 
 abstract class GameObject implements IGameObject {
     pos: {x: number, y: number}
     dims: {w: number, h: number}
 
-    public getEdges(): Edges {
+    public getEdges(): Position {
         return {
             a: {
                 x: this.pos.x,

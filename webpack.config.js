@@ -2,9 +2,9 @@ const path = require('path')
 
 module.exports = {
     devtool: 'inline-sourcemap',
-    entry: __dirname + '/src/main.ts',
+    entry: path.resolve(__dirname, 'src', 'main.ts'),
     output: {
-        path: __dirname + '/dist',
+        path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js'
     },
     module: {

@@ -1,27 +1,33 @@
-import { Edges, CollisionResult } from 'common/interfaces'
+import { Position, CollisionResult } from 'common/interfaces'
 import GameObject from 'common/gameObject'
+import Connection from 'common/connection'
 import EventEmitter from 'events/eventEmitter'
+import Scene from 'scene'
 import Wall from 'objects/wall'
+import { syncCoordinates } from 'actions/creators'
 
 interface IGame {
     canvas: HTMLCanvasElement
     ctx: CanvasRenderingContext2D
-    objects: GameObject[]
-    draw: () => void,
-    addObject: (obj: GameObject) => void
-    checkCollision(edges: Edges): CollisionResult
+    scenes: Scene[]
+    draw: () => void
+    checkCollision(edges: Position): CollisionResult
+    currentScene: Scene
 }
 
 class Game implements IGame {
-    canvas: HTMLCanvasElement
-    ctx: CanvasRenderingContext2D
-    objects: GameObject[]
+    public canvas: HTMLCanvasElement
+    public ctx: CanvasRenderingContext2D
+    public currentScene: Scene
+    public scenes: Scene[]
 
     constructor() {
         this.canvas = <HTMLCanvasElement>document.querySelector('#render-target')
         this.ctx = <CanvasRenderingContext2D>this.canvas.getContext('2d')
-        this.objects = []
+        this.scenes = []
+    }
 
+    public init(): void {
         document.addEventListener('keydown', (e) => {
             EventEmitter.emit(e.code.toLowerCase() + 'pressed')
         })
@@ -31,19 +37,32 @@ class Game implements IGame {
         })
     }
 
-    draw(): void {
+    public draw(): void {
         this.ctx.fillStyle = 'white'
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-        this.objects.forEach((obj) => obj.draw(this.ctx))
+        this.currentScene.objects.forEach((obj) => obj.draw(this.ctx))
+
+        const coordinates = Array.from(this.currentScene.objects).reduce((res, [id, obj]) => {
+            return res.set(id, obj.pos)
+        }, new Map())
+
+        Connection.emit(syncCoordinates({data: coordinates}))
     }
 
-    addObject(obj: GameObject) {
-        this.objects.push(obj)
+    public createScene(tag: string): Scene {
+        const scene = new Scene(tag)
+        this.scenes.push(scene)
+
+        return scene
     }
 
-    checkCollision(edges: Edges): CollisionResult {
+    public setScene(scene: Scene): void {
+        this.currentScene = scene
+    }
+
+    public checkCollision(edges: Position): CollisionResult {
         const { a: edgeA, b: edgeB, c: edgeC, d: edgeD } = edges
-        const wallObjs = this.objects.filter((gameObj) => gameObj instanceof Wall)
+        const objs = Array.from(this.currentScene.objects)
 
         const DEFAULT_RESULT = {
             yBelow: false,
@@ -52,7 +71,7 @@ class Game implements IGame {
             xRight: false
         }
 
-        return wallObjs.reduce((result, wallObj) => {
+        return objs.reduce((result, [_, wallObj]) => {
             const { a: wallEdgeA, b: wallEdgeB, c: wallEdgeC, d: wallEdgeD } = wallObj.getEdges()
 
             if ((edgeB.x > wallEdgeD.x && edgeA.x < wallEdgeC.x) && (edgeA.y === wallEdgeD.y)) {

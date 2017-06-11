@@ -1,26 +1,38 @@
 import Game from 'game'
-import Wall from 'objects/wall'
-import Player from 'objects/player'
+import Connection from 'common/connection'
+import gameSettings from 'common/gameSettings'
+import mainScene from 'scenes/main'
 
-const player1 = new Player(430, Game.canvas.height - 350, 50, 50)
-const floor = new Wall(300, Game.canvas.height - 300, Game.canvas.width - 600, 20)
-const platform = new Wall(450, Game.canvas.height - 420, 200, 20)
-const platform2 = new Wall(1200, Game.canvas.height - 420, 200, 20)
-const platform3 = new Wall(810, Game.canvas.height - 520, 250, 20)
+const gameEl = <HTMLElement>document.querySelector('.game-container')
+const menuEl = <HTMLElement>document.querySelector('.menu-container')
+const usernameInputEl = <HTMLInputElement>document.querySelector('.user-input')
+const startButtonEl = <HTMLButtonElement>document.querySelector('.start-button')
 
-Game.addObject(player1)
-Game.addObject(floor)
-Game.addObject(platform)
-Game.addObject(platform2)
-Game.addObject(platform3)
+const initGame = () => {
+    gameEl.style.display = 'initial'
+    menuEl.style.display = 'none'
 
-const gameLoop = () => {
-    Game.draw()
-    // setTimeout(() => {
+    const gameLoop = () => {
+        Game.draw()
         requestAnimationFrame(gameLoop)
-    // }, 300)
+    }
+
+    Game.init()
+    Game.setScene(mainScene)
+    Connection.init('http://localhost:8080')
+    gameLoop()
 }
 
-gameLoop();
 
-(<any>window).Game = Game
+usernameInputEl.addEventListener('input', (e) => {
+    gameSettings.username = (<HTMLInputElement>e.target).value
+})
+
+startButtonEl.addEventListener('click', () => {
+    if (!gameSettings.username) {
+        alert('Input username first!')
+        return
+    }
+
+    initGame()
+})
