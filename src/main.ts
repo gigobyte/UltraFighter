@@ -1,6 +1,5 @@
-import Game from 'game'
-import Connection from 'common/connection'
-import gameSettings from 'common/gameSettings'
+import gameSettings from "store/gameSettings"
+import Game from 'infrastructure/game'
 import mainScene from 'scenes/main'
 
 const gameEl = <HTMLElement>document.querySelector('.game-container')
@@ -12,15 +11,9 @@ const initGame = () => {
     gameEl.style.display = 'initial'
     menuEl.style.display = 'none'
 
-    const gameLoop = () => {
-        Game.draw()
-        requestAnimationFrame(gameLoop)
-    }
-
-    Game.init()
-    Game.setScene(mainScene)
-    Connection.init()
-    gameLoop()
+    Game.init({
+        scene: mainScene
+    })
 }
 
 

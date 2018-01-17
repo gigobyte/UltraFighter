@@ -1,27 +1,20 @@
-import { IClient } from './client'
+import Client from './client'
 
-interface IRoom {
-    id: string,
-    clients: Set<IClient>
-    addClient(client: IClient): void
-    removeClient(client: IClient): void
-}
+class Room  {
+    public clients: Set<Client> = new Set()
 
-class Room implements IRoom {
-    public id: string
-    public clients: Set<IClient>
+    constructor(public id: string) { }
 
-    constructor(id: string) {
-        this.id = id
-        this.clients = new Set()
-    }
-
-    public addClient(client: IClient): void {
+    public addClient(client: Client): void {
         this.clients.add(client)
     }
 
-    public removeClient(client: IClient): void {
+    public removeClient(client: Client): void {
         this.clients.delete(client)
+    }
+
+    public findClientById(id: Client['id']) {
+        return Array.from(this.clients).find((client) => client.id === id)
     }
 }
 

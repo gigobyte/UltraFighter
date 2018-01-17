@@ -1,17 +1,12 @@
-import { Position } from 'common/interfaces'
+import { Action } from './../../../shared/actions';
+import { GameObjectEdges } from 'infrastructure/gameObject/types'
+import { EventListener } from 'infrastructure/eventEmitter/types'
 
-export interface IGameObject {
-    draw: (ctx: CanvasRenderingContext2D) => void
-    pos: {x: number, y: number}
-    dims: {w: number, h: number}
-    getEdges(): Position
-}
+abstract class GameObject implements EventListener {
+    pos: { x: number, y: number }
+    dims: { w: number, h: number }
 
-abstract class GameObject implements IGameObject {
-    pos: {x: number, y: number}
-    dims: {w: number, h: number}
-
-    public getEdges(): Position {
+    public getEdges(): GameObjectEdges {
         return {
             a: {
                 x: this.pos.x,
@@ -33,6 +28,8 @@ abstract class GameObject implements IGameObject {
     }
 
     abstract draw(ctx: CanvasRenderingContext2D): void
+
+    public onAction(_: Action) {}
 }
 
 export default GameObject

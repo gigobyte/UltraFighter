@@ -1,29 +1,20 @@
-import Game from 'game'
-import GameObject from 'common/gameObject'
-import gameSettings from 'common/gameSettings'
+import { EventListener } from 'infrastructure/eventEmitter/types'
+import { Action } from '../../shared/actions'
+import GameObject from 'infrastructure/gameObject'
+import Game from 'infrastructure/game'
+import gameSettings from 'store/gameSettings'
 
-interface IPlayer {
-    velocity: {x: number, y: number}
-    onArrowUpPressed: () => void
-    onArrowLeftPressed: () => void
-    onArrowLeftReleased: () => void
-    onArrowRightPressed: () => void
-    onArrowRightReleased: () => void
-    moving: {left: boolean, right: boolean, up: boolean}
-    pressed: {left: boolean, right: boolean}
-}
-
-class Player extends GameObject implements IPlayer {
-    pos: {x: number, y: number}
-    dims: {w: 50, h: 50}
-    velocity = {x: 0, y: 0}
-    moving = {left: false, right: false, up: false}
-    pressed = {left: false, right: false, up: false}
+class Player extends GameObject implements EventListener {
+    pos: { x: number, y: number }
+    dims: { w: 50, h: 50 }
+    velocity = { x: 0, y: 0 }
+    moving = { left: false, right: false, up: false }
+    pressed = { left: false, right: false, up: false }
 
     constructor(x: number, y: number) {
         super()
-        this.pos = {x, y}
-        this.dims = {w: 50, h: 50}
+        this.pos = { x, y }
+        this.dims = { w: 50, h: 50 }
     }
 
     private setNewYPosition(): void {
@@ -109,33 +100,48 @@ class Player extends GameObject implements IPlayer {
         ctx.fillText(gameSettings.username, this.pos.x + 25, this.pos.y - 10)
     }
 
-    public onArrowUpPressed() {
-        if (!this.pressed.up && !this.moving.up && this.velocity.y <= 0) {
-            this.velocity.y = -gameSettings.vspeed
-            this.pressed.up = true
+    
+    public onAction(action: Action) {
+        if (action.kind === 'key-pressed') {
+            this.handleKeyPressed(action.payload)
+        }
+
+        if (action.kind === 'key-released') {
+            this.handleKeyReleased(action.payload)
         }
     }
 
-    public onArrowUpReleased() {
-        this.pressed.up = false
+    private handleKeyPressed(keyCode: string) {
+        if (keyCode === 'ArrowUp') {
+            if (!this.pressed.up && !this.moving.up && this.velocity.y <= 0) {
+                this.velocity.y = -gameSettings.vspeed
+                this.pressed.up = true
+            }
+        }
+
+        if (keyCode === 'ArrowLeft') {
+            this.pressed.left = true
+            this.velocity.x = -gameSettings.hspeed
+        }
+
+        if (keyCode === 'ArrowRight') {
+            this.pressed.right = true
+            this.velocity.x = gameSettings.hspeed
+        }
     }
 
-    public onArrowLeftPressed() {
-        this.pressed.left = true
-        this.velocity.x = -gameSettings.hspeed
-    }
+    private handleKeyReleased(keyCode: string) {
+        if (keyCode === 'ArrowUp') {
+            this.pressed.up = false
+        }
 
-    public onArrowLeftReleased() {
-        this.pressed.left = false
-    }
+        if (keyCode === 'ArrowLeft') {
+            this.pressed.left = false
+        }
 
-    public onArrowRightPressed() {
-        this.pressed.right = true
-        this.velocity.x = gameSettings.hspeed
-    }
-
-    public onArrowRightReleased() {
-        this.pressed.right = false
+        if (keyCode === 'ArrowRight') {
+            this.pressed.right = false
+        }
     }
 }
 

@@ -4,7 +4,7 @@ import * as socket from 'socket.io'
 import handleActions from './handleActions'
 
 const app = express()
-const server = app.listen(process.env.PORT)
+const server = app.listen(process.env.PORT || 8080)
 
 app.use(express.static(path.resolve(__dirname, '..', 'dist')))
 
