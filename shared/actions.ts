@@ -22,7 +22,7 @@ export interface IAction {
 
 export interface UserLeftAction extends IAction {
     kind: 'user-left',
-    payload: Client['username']
+    payload: Client
 }
 
 export interface CreateRoomAction extends IAction {
@@ -53,7 +53,7 @@ export interface RoomIsFullAction extends IAction {
 
 export interface UserJoinedAction extends IAction {
     kind: 'user-joined',
-    payload: Client['username']
+    payload: Client
 }
 
 export interface SyncCoordinatesAction extends IAction {
@@ -76,9 +76,9 @@ export interface ShowEnemyInRoomAction extends IAction {
     payload: Client
 }
 
-export const userLeft = (username: Client['username']): UserLeftAction => ({
+export const userLeft = (user: Client): UserLeftAction => ({
     kind: 'user-left',
-    payload: username
+    payload: user
 })
 
 export const createRoom = (username: Client['username']): CreateRoomAction => ({
@@ -93,7 +93,7 @@ export const roomCreated = (id: Room['id']): RoomCreatedAction => ({
 
 export const joinRoom = (roomId: Room['id'], username: Client['username']): JoinRoomAction => ({
     kind: 'join-room',
-    payload: { roomId, username}
+    payload: { roomId, username }
 })
 
 export const roomNotFound = (): RoomNotFoundAction => ({
@@ -104,9 +104,9 @@ export const roomIsFull = (): RoomIsFullAction => ({
     kind: 'room-is-full'
 })
 
-export const userJoined = (username: Client['username']): UserJoinedAction => ({
+export const userJoined = (user: Client): UserJoinedAction => ({
     kind: 'user-joined',
-    payload: username
+    payload: user
 })
 
 export const syncCoordinates = (data: any): SyncCoordinatesAction => ({

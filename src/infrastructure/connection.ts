@@ -25,7 +25,7 @@ class Connection {
         })
 
         this.socket.on('user-joined', (data: GetPayload<Actions.UserJoinedAction>) => {
-            if (data !== gameSettings.username) {
+            if (data.username !== gameSettings.username) {
                 EventEmitter.emit(Actions.userJoined(data))
             }
         })

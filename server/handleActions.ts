@@ -15,10 +15,10 @@ const handleActions = (socket: SocketIO.Socket): void => {
             if (disconnectedClient) {
                 room.removeClient(disconnectedClient)
 
-                if (room.clients.size === 0 ) {
+                if (room.clients.size === 0) {
                     rooms.delete(roomId)
                 } else {
-                    room.clients.forEach(() => broadcast(socket, Actions.userLeft(disconnectedClient.username)))
+                    room.clients.forEach(() => broadcast(socket, Actions.userLeft(disconnectedClient)))
                 }
             }
         }
@@ -48,7 +48,7 @@ const handleActions = (socket: SocketIO.Socket): void => {
         const otherPlayer = Array.from(room.clients)[0]
         
         room.addClient(client)
-        emitTo(socket, otherPlayer.id, Actions.userJoined(client.username))
+        emitTo(socket, otherPlayer.id, Actions.userJoined(client))
         emit(socket, Actions.showEnemyInRoom(otherPlayer))
     })
 
