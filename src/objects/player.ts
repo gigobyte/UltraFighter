@@ -1,12 +1,12 @@
 import { EventListener } from 'infrastructure/eventEmitter/types'
 import { Action } from '../../shared/actions'
-import GameObject from 'infrastructure/gameObject'
+import GameObject from 'infrastructure/entities/gameObject'
 import Game from 'infrastructure/game'
 import gameSettings from 'store/gameSettings'
 
 class Player extends GameObject implements EventListener {
     pos: { x: number, y: number }
-    dims: { w: 50, h: 50 }
+    dims: { w: 50, h: 50 } = {w: 50, h: 50}
     velocity = { x: 0, y: 0 }
     moving = { left: false, right: false, up: false }
     pressed = { left: false, right: false, up: false }
@@ -14,7 +14,6 @@ class Player extends GameObject implements EventListener {
     constructor(x: number, y: number) {
         super()
         this.pos = { x, y }
-        this.dims = { w: 50, h: 50 }
     }
 
     private setNewYPosition(): void {

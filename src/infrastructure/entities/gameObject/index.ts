@@ -1,10 +1,11 @@
-import { Action } from './../../../shared/actions';
-import { GameObjectEdges } from 'infrastructure/gameObject/types'
+import { Action } from './../../../../shared/actions';
+import { GameObjectEdges } from 'infrastructure/entities/gameObject/types'
 import { EventListener } from 'infrastructure/eventEmitter/types'
 
 abstract class GameObject implements EventListener {
     pos: { x: number, y: number }
     dims: { w: number, h: number }
+    zIndex: number
 
     public getEdges(): GameObjectEdges {
         return {

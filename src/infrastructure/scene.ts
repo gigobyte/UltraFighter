@@ -1,4 +1,4 @@
-import GameObject from 'infrastructure/gameObject'
+import GameObject from 'infrastructure/entities/gameObject'
 import EventEmitter from 'infrastructure/eventEmitter'
 import { EventListener } from 'infrastructure/eventEmitter/types';
 

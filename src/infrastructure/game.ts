@@ -1,7 +1,7 @@
 import EventEmitter from 'infrastructure/eventEmitter'
 import Scene from 'infrastructure/scene'
 import Connection from 'infrastructure/connection'
-import { GameObjectEdges, CollisionResult } from 'infrastructure/gameObject/types'
+import { GameObjectEdges, CollisionResult } from 'infrastructure/entities/gameObject/types'
 import { keyReleased, keyPressed, syncCoordinates } from './../../shared/actions';
 
 class Game {

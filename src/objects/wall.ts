@@ -1,4 +1,4 @@
-import GameObject from 'infrastructure/gameObject'
+import GameObject from 'infrastructure/entities/gameObject'
 
 class Wall extends GameObject {
     pos: { x: number, y: number }

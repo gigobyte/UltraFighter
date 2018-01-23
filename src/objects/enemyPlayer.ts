@@ -1,6 +1,6 @@
 import { Action } from '../../shared/actions';
 import Game from 'infrastructure/game'
-import GameObject from 'infrastructure/gameObject'
+import GameObject from 'infrastructure/entities/gameObject'
 import gameSettings from 'store/gameSettings'
 
 class EnemyPlayer extends GameObject {
