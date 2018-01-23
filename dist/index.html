@@ -5,6 +5,7 @@
         <meta content="width=device-width,initial-scale=1" name="viewport">
         <meta name="theme-color" content="#1e1e1e">
         <title>Game</title>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
     </head>
     <style>
         .menu-container {
@@ -20,8 +21,9 @@
         }
 
         .user-input {
-            line-height: 20px;
-            font-size: 20px;
+            line-height: 18px;
+            font-size: 18px;
+            width: initial;
         }
 
         .start-button {
@@ -31,8 +33,8 @@
     <body>
         <div class="menu-container">
             <span>Enter name: </span>
-            <input class="user-input" type="text" />
-            <button class="start-button">Start</button>
+            <input class="input user-input" type="text" />
+            <button class="button is-link start-button">Start</button>
         </div>
         <div class="game-container" style="display: none;">
             <canvas id="render-target" width="1860" height="960"></canvas>
