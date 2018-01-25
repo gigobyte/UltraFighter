@@ -3,6 +3,7 @@ import GameObject from 'infrastructure/entities/gameObject'
 class Wall extends GameObject {
     pos: { x: number, y: number }
     dims: { w: number, h: number }
+    isStatic = true
 
     constructor(x: number, y: number, w: number, h: number) {
         super()

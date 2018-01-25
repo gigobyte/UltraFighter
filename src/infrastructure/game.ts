@@ -32,13 +32,28 @@ class Game {
             requestAnimationFrame(gameLoop)
         }
 
+        this.drawStaticObjects()
         gameLoop()
     }
 
+    public drawStaticObjects(): void {
+        this.currentScene.objects.forEach((obj) => {
+            if (obj.isStatic) {
+                obj.draw(this.ctx)
+            }
+        })
+    }
+
     public draw(): void {
-        this.ctx.fillStyle = 'white'
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-        this.currentScene.objects.forEach((obj) => obj.draw(this.ctx))
+        // this.ctx.fillStyle = 'white'
+        // this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+        this.currentScene.objects.forEach((obj) => {
+            if (!obj.isStatic) {
+                this.ctx.fillStyle = 'white'
+                this.ctx.fillRect(obj.pos.x, obj.pos.y, obj.dims.w, obj.dims.h)
+                obj.draw(this.ctx)
+            }
+        })
 
         const coordinates = Array.from(this.currentScene.objects).reduce((res, [id, obj]) => {
             return { ...res, [id]: obj.pos }

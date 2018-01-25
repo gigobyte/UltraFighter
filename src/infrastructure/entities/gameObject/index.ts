@@ -6,6 +6,7 @@ abstract class GameObject implements EventListener {
     pos: { x: number, y: number }
     dims: { w: number, h: number }
     zIndex: number
+    isStatic: boolean
 
     public getEdges(): GameObjectEdges {
         return {

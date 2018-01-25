@@ -10,6 +10,7 @@ class Player extends GameObject implements EventListener {
     velocity = { x: 0, y: 0 }
     moving = { left: false, right: false, up: false }
     pressed = { left: false, right: false, up: false }
+    isStatic = false
 
     constructor(x: number, y: number) {
         super()
@@ -96,7 +97,7 @@ class Player extends GameObject implements EventListener {
         ctx.textAlign = 'center'
         ctx.font = '16px Ariel'
         ctx.fillRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h)
-        ctx.fillText(gameSettings.username, this.pos.x + 25, this.pos.y - 10)
+        // ctx.fillText(gameSettings.username, this.pos.x + 25, this.pos.y - 10)
     }
 
     

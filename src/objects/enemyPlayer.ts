@@ -7,6 +7,7 @@ class EnemyPlayer extends GameObject {
     pos: { x: number, y: number }
     dims: { w: 50, h: 50 }
     username: string
+    isStatic = false
 
     constructor(x: number, y: number, username: string) {
         super()
